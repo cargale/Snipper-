@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrono Sniper Arcade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --neon-pink: #ff00ff;
+            --neon-cyan: #00ffff;
+            --neon-yellow: #ffff00;
+            --neon-green: #00ff00;
+            --neon-red: #ff003c;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(rgba(255, 0, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .arcade-cabinet {
+            background: rgba(10, 10, 20, 0.95);
+            padding: 30px;
+            border: 4px solid var(--neon-cyan);
+            border-radius: 15px;
+            box-shadow: 0 0 15px var(--neon-cyan), inset 0 0 20px var(--neon-cyan);
+            text-align: center;
+            width: 400px;
+            z-index: 10;
+            position: relative;
+            transition: transform 0.1s;
+        }
+
+        /* Gestión de Pantallas */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        .screen.active {
+            display: block;
+        }
+
+        h1, h2 {
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+            line-height: 1.4;
+        }
+
+        h1 { font-size: 1.5rem; margin-bottom: 30px; }
+        h2 { font-size: 1.2rem; margin-bottom: 20px; }
+
+        /* Mirilla CSS */
+        .crosshair {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border: 2px solid var(--neon-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 0 15px var(--neon-red), inset 0 0 15px var(--neon-red);
+            animation: pulse-red 2s infinite;
+        }
+        .crosshair::before {
+            content: ""; position: absolute; top: -10px; bottom: -10px; left: calc(50% - 1px); width: 2px; background: var(--neon-red);
+        }
+        .crosshair::after {
+            content: ""; position: absolute; left: -10px; right: -10px; top: calc(50% - 1px); height: 2px; background: var(--neon-red);
+        }
+        .crosshair span {
+            position: relative;
+            z-index: 1;
+            background: rgba(10, 10, 20, 0.8);
+            padding: 5px;
+            color: var(--neon-green);
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+
+        .stats, .summary-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--neon-cyan);
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px var(--neon-cyan);
+        }
+
+        .summary-stats {
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+            margin: 30px 0;
+            border: 1px dashed var(--neon-cyan);
+            padding: 15px;
+        }
+
+        #timer {
+            font-size: 2.8rem;
+            margin: 30px 0;
+            color: #fff;
+            text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-cyan), 0 0 30px var(--neon-cyan);
+        }
+
+        #message {
+            font-size: 1rem;
+            height: 1rem;
+            margin: 20px 0;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .btn {
+            font-family: 'Press Start 2P', cursive;
+            padding: 15px;
+            font-size: 1rem;
+            border: 2px solid var(--neon-pink);
+            background: transparent;
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+            box-shadow: 0 0 10px var(--neon-pink) inset, 0 0 10px var(--neon-pink);
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover, .btn:active {
+            background: var(--neon-pink);
+            color: #fff;
+            box-shadow: 0 0 20px var(--neon-pink) inset, 0 0 30px var(--neon-pink);
+        }
+
+        .history {
+            margin-top: 25px;
+            font-size: 0.55rem;
+            max-height: 120px;
+            overflow-y: auto;
+            text-align: left;
+            border-top: 2px dashed #333;
+            padding-top: 10px;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulse-red { 0%, 100% { box-shadow: 0 0 10px var(--neon-red), inset 0 0 10px var(--neon-red); } 50% { box-shadow: 0 0 25px var(--neon-red), inset 0 0 25px var(--neon-red); } }
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(-3px, 2px) rotate(-1deg); }
+            40% { transform: translate(3px, -2px) rotate(1deg); }
+            60% { transform: translate(-3px, -2px) rotate(-1deg); }
+            80% { transform: translate(3px, 2px) rotate(1deg); }
+        }
+        .shake { animation: shake 0.3s; }
+        .flash { animation: flashAnim 0.5s ease-out; }
+        @keyframes flashAnim {
+            0% { background-color: #fff; box-shadow: 0 0 50px #fff; }
+            100% { background-color: rgba(10, 10, 20, 0.95); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="arcade-cabinet" id="cabinet">
+    
+    <div id="screen-start" class="screen active">
+        <h1>CHRONO<br>SNIPER</h1>
+        <div class="crosshair">
+            <span>0.000</span>
+        </div>
+        <p style="font-size: 0.6rem; color: var(--neon-yellow); line-height: 1.5; margin-bottom: 30px;">
+            Target: X.000<br><br>
+            Perfect = 1000 pts<br>
+            Great (X.00_) = 100 pts<br>
+            Good (X.0__) = 10 pts<br>
+            Bad = 0 pts
+        </p>
+        <button class="btn" onclick="initGame()">INSERT COIN</button>
+    </div>
+
+    <div id="screen-game" class="screen">
+        <h2>SNIPER MODE</h2>
+        <div class="stats">
+            <div>AMMO: <span id="laps-left">10</span></div>
+            <div>SCORE: <span id="score">0</span></div>
+        </div>
+        
+        <div id="timer">0.000</div>
+        <div id="message" style="color: var(--neon-yellow);">READY...</div>
+
+        <button id="btn-main" class="btn" onclick="handleLap()">SHOOT!</button>
+
+        <div class="history" id="history">
+            <p style="text-align:center; opacity: 0.5;">--- COMBAT LOG ---</p>
+        </div>
+    </div>
+
+    <div id="screen-result" class="screen">
+        <h1>MISSION<br>OVER</h1>
+        
+        <h2 style="color: var(--neon-cyan); font-size: 1.5rem;">SCORE: <span id="final-score">0</span></h2>
+        
+        <div class="summary-stats">
+            <div><span style="color: var(--neon-green);">PERFECTS:</span> <span id="sum-perfect">0</span></div>
+            <div><span style="color: var(--neon-cyan);">GREATS:</span> <span id="sum-great">0</span></div>
+            <div><span style="color: var(--neon-yellow);">GOODS:</span> <span id="sum-good">0</span></div>
+            <div><span style="color: var(--neon-red);">MISSES:</span> <span id="sum-bad">0</span></div>
+        </div>
+
+        <button class="btn" onclick="showStartScreen()">MAIN MENU</button>
+    </div>
+
+</div>
+
+<script>
+    // --- MOTOR DE AUDIO ---
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+
+    function initAudio() {
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playTone(freq, type, duration, vol=0.1) {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playSoundEffect(result) {
+        switch(result) {
+            case 'perfect':
+                playTone(880, 'square', 0.1, 0.2); setTimeout(() => playTone(1108, 'square', 0.1, 0.2), 100); setTimeout(() => playTone(1318, 'square', 0.4, 0.2), 200); 
+                break;
+            case 'great':
+                playTone(523, 'square', 0.1, 0.1); setTimeout(() => playTone(659, 'square', 0.2, 0.1), 100); 
+                break;
+            case 'good':
+                playTone(440, 'triangle', 0.2, 0.1);
+                break;
+            case 'bad': // Sonido de fallo/error
+                playTone(150, 'sawtooth', 0.3, 0.3); setTimeout(() => playTone(100, 'sawtooth', 0.4, 0.3), 150);
+                break;
+            case 'start': // Pitido al arrancar el crono
+                playTone(1200, 'sine', 0.05, 0.1);
+                break;
+            case 'shoot': // Clic al disparar
+                playTone(200, 'square', 0.05, 0.2);
+                break;
+            case 'gameover':
+                playTone(400, 'sawtooth', 0.2, 0.2); setTimeout(() => playTone(300, 'sawtooth', 0.2, 0.2), 200); setTimeout(() => playTone(200, 'sawtooth', 0.6, 0.2), 400);
+                break;
+        }
+    }
+
+    // --- VARIABLES DE JUEGO ---
+    let startTime;
+    let timerInterval;
+    let lapsRemaining = 10;
+    let totalScore = 0;
+    let isRunning = false;
+    
+    // Contadores para el resumen final
+    let matchStats = { perfect: 0, great: 0, good: 0, bad: 0 };
+
+    // --- REFERENCIAS DOM ---
+    const cabinet = document.getElementById('cabinet');
+    const screenStart = document.getElementById('screen-start');
+    const screenGame = document.getElementById('screen-game');
+    const screenResult = document.getElementById('screen-result');
+    
+    const timerDisplay = document.getElementById('timer');
+    const messageDisplay = document.getElementById('message');
+    const scoreDisplay = document.getElementById('score');
+    const lapsDisplay = document.getElementById('laps-left');
+    const historyBox = document.getElementById('history');
+    const btnMain = document.getElementById('btn-main');
+
+    // --- NAVEGACIÓN ENTRE PANTALLAS ---
+    function switchScreen(screenElement) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        screenElement.classList.add('active');
+    }
+
+    function showStartScreen() {
+        switchScreen(screenStart);
+    }
+
+    function initGame() {
+        initAudio(); // Desbloquea el audio en el primer clic del usuario
+        playSoundEffect('start');
+        
+        // Reiniciar variables
+        lapsRemaining = 10;
+        totalScore = 0;
+        isRunning = false;
+        matchStats = { perfect: 0, great: 0, good: 0, bad: 0 };
+        
+        // Reiniciar UI
+        scoreDisplay.textContent = "0";
+        lapsDisplay.textContent = "10";
+        timerDisplay.textContent = "0.000";
+        messageDisplay.textContent = "READY...";
+        messageDisplay.style.color = "var(--neon-yellow)";
+        historyBox.innerHTML = '<p style="text-align:center; opacity: 0.5;">--- COMBAT LOG ---</p>';
+        
+        btnMain.textContent = "SHOOT!";
+        btnMain.disabled = false;
+        btnMain.style.borderColor = "var(--neon-pink)";
+        btnMain.style.color = "var(--neon-pink)";
+
+        switchScreen(screenGame);
+    }
+
+    // --- LÓGICA DEL CRONÓMETRO ---
+    function startTimer() {
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            const elapsedTime = Date.now() - startTime;
+            timerDisplay.textContent = (elapsedTime / 1000).toFixed(3);
+        }, 10);
+    }
+
+    function handleLap() {
+        if (!isRunning) {
+            playSoundEffect('start');
+            startTimer();
+            isRunning = true;
+            btnMain.textContent = "STOP!";
+            btnMain.style.borderColor = "var(--neon-cyan)";
+            btnMain.style.color = "var(--neon-cyan)";
+            messageDisplay.textContent = "TARGET LOCKED!";
+            messageDisplay.style.color = "#fff";
+            return;
+        }
+
+        playSoundEffect('shoot'); // Sonido de disparo
+        clearInterval(timerInterval); // Parar el tiempo inmediatamente
+
+        const timeString = timerDisplay.textContent;
+        const msString = timeString.split('.')[1]; // Extraemos los 3 números después de la coma
+        
+        let points = 0; let msg = ""; let color = ""; let soundType = "";
+
+        // Reiniciar animaciones
+        cabinet.classList.remove('shake', 'flash');
+        void cabinet.offsetWidth;
+
+        // Comprobación visual estricta
+        if (msString === "000") {
+            points = 1000; msg = "PERFECT!!!"; color = "var(--neon-green)"; soundType = "perfect";
+            matchStats.perfect++;
+            cabinet.classList.add('flash');
+        } else if (msString.startsWith("00")) {
+            points = 100; msg = "GREAT!"; color = "var(--neon-cyan)"; soundType = "great";
+            matchStats.great++;
+        } else if (msString.startsWith("0")) {
+            points = 10; msg = "GOOD"; color = "var(--neon-yellow)"; soundType = "good";
+            matchStats.good++;
+        } else {
+            points = 0; msg = "MISS..."; color = "var(--neon-red)"; soundType = "bad";
+            matchStats.bad++;
+            cabinet.classList.add('shake');
+        }
+
+        setTimeout(() => playSoundEffect(soundType), 50); // Pequeño retraso para no pisar el sonido de disparo
+
+        totalScore += points;
+        lapsRemaining--;
+        
+        messageDisplay.textContent = msg;
+        messageDisplay.style.color = color;
+        messageDisplay.style.textShadow = `0 0 10px ${color}`;
+        scoreDisplay.textContent = totalScore;
+        lapsDisplay.textContent = lapsRemaining;
+
+        const lapRecord = document.createElement('div');
+        lapRecord.innerHTML = `[${10 - lapsRemaining}] <b>${timeString}</b> - <span style="color:${color}">${msg}</span> (+${points})`;
+        historyBox.prepend(lapRecord);
+        
+        if (lapsRemaining > 0) {
+            btnMain.textContent = "RELOADING...";
+            btnMain.disabled = true;
+            setTimeout(() => {
+                playSoundEffect('start');
+                startTimer();
+                btnMain.textContent = "STOP!";
+                btnMain.disabled = false;
+            }, 1000); // 1 segundo para ver el resultado y "recargar"
+        } else {
+            setTimeout(endGame, 1000); // Esperar 1 segundo antes de ir a la pantalla de resumen
+        }
+    }
+
+    function endGame() {
+        playSoundEffect('gameover');
+        
+        // Llenar datos de la pantalla de resumen
+        document.getElementById('final-score').textContent = totalScore;
+        document.getElementById('sum-perfect').textContent = matchStats.perfect;
+        document.getElementById('sum-great').textContent = matchStats.great;
+        document.getElementById('sum-good').textContent = matchStats.good;
+        document.getElementById('sum-bad').textContent = matchStats.bad;
+
+        switchScreen(screenResult);
+    }
+</script>
+
+</body>
+</html>
+</html>
