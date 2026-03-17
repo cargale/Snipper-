@@ -33,159 +33,89 @@
         }
 
         body::after {
-            content: " ";
-            display: block;
-            position: absolute;
+            content: " "; display: block; position: absolute;
             top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
+            z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none;
         }
 
         .arcade-cabinet {
             background: rgba(10, 10, 20, 0.95);
-            padding: 30px;
-            border: 4px solid var(--neon-cyan);
-            border-radius: 15px;
-            box-shadow: 0 0 15px var(--neon-cyan), inset 0 0 20px var(--neon-cyan);
-            text-align: center;
-            width: 400px;
-            z-index: 10;
-            position: relative;
-            transition: transform 0.1s;
+            padding: 30px; border: 4px solid var(--neon-cyan);
+            border-radius: 15px; box-shadow: 0 0 15px var(--neon-cyan), inset 0 0 20px var(--neon-cyan);
+            text-align: center; width: 400px; max-height: 90vh; overflow-y: auto;
+            z-index: 10; position: relative; transition: transform 0.1s;
         }
 
         /* Gestión de Pantallas */
-        .screen {
-            display: none;
-            animation: fadeIn 0.5s ease-in;
-        }
-        .screen.active {
-            display: block;
-        }
+        .screen { display: none; animation: fadeIn 0.5s ease-in; }
+        .screen.active { display: block; }
 
-        h1, h2 {
-            color: var(--neon-pink);
-            text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
-            line-height: 1.4;
-        }
-
-        h1 { font-size: 1.5rem; margin-bottom: 30px; }
+        h1, h2, h3 { color: var(--neon-pink); text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink); line-height: 1.4; }
+        h1 { font-size: 1.5rem; margin-bottom: 20px; }
         h2 { font-size: 1.2rem; margin-bottom: 20px; }
+        h3 { font-size: 1rem; color: var(--neon-yellow); text-shadow: 0 0 10px var(--neon-yellow); }
 
         /* Mirilla CSS */
         .crosshair {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            border: 2px solid var(--neon-red);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 30px auto;
+            position: relative; width: 100px; height: 100px;
+            border: 2px solid var(--neon-red); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px auto;
             box-shadow: 0 0 15px var(--neon-red), inset 0 0 15px var(--neon-red);
             animation: pulse-red 2s infinite;
         }
-        .crosshair::before {
-            content: ""; position: absolute; top: -10px; bottom: -10px; left: calc(50% - 1px); width: 2px; background: var(--neon-red);
-        }
-        .crosshair::after {
-            content: ""; position: absolute; left: -10px; right: -10px; top: calc(50% - 1px); height: 2px; background: var(--neon-red);
-        }
-        .crosshair span {
-            position: relative;
-            z-index: 1;
-            background: rgba(10, 10, 20, 0.8);
-            padding: 5px;
-            color: var(--neon-green);
-            font-size: 0.9rem;
-            text-shadow: 0 0 5px var(--neon-green);
-        }
+        .crosshair::before { content: ""; position: absolute; top: -10px; bottom: -10px; left: calc(50% - 1px); width: 2px; background: var(--neon-red); }
+        .crosshair::after { content: ""; position: absolute; left: -10px; right: -10px; top: calc(50% - 1px); height: 2px; background: var(--neon-red); }
+        .crosshair span { position: relative; z-index: 1; background: rgba(10, 10, 20, 0.8); padding: 5px; color: var(--neon-green); font-size: 0.8rem; text-shadow: 0 0 5px var(--neon-green); }
 
-        .stats, .summary-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: var(--neon-cyan);
-            margin-bottom: 20px;
-            text-shadow: 0 0 5px var(--neon-cyan);
-        }
+        .stats, .summary-stats { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--neon-cyan); margin-bottom: 20px; text-shadow: 0 0 5px var(--neon-cyan); }
+        .summary-stats { flex-direction: column; gap: 10px; text-align: left; margin: 20px 0; border: 1px dashed var(--neon-cyan); padding: 15px; }
 
-        .summary-stats {
-            flex-direction: column;
-            gap: 15px;
-            text-align: left;
-            margin: 30px 0;
-            border: 1px dashed var(--neon-cyan);
-            padding: 15px;
-        }
-
-        #timer {
-            font-size: 2.8rem;
-            margin: 30px 0;
-            color: #fff;
-            text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-cyan), 0 0 30px var(--neon-cyan);
-        }
-
-        #message {
-            font-size: 1rem;
-            height: 1rem;
-            margin: 20px 0;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 0px #000;
-        }
+        #timer { font-size: 2.8rem; margin: 30px 0; color: #fff; text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-cyan), 0 0 30px var(--neon-cyan); }
+        #message { font-size: 1rem; height: 1rem; margin: 20px 0; text-transform: uppercase; text-shadow: 2px 2px 0px #000; }
 
         .btn {
-            font-family: 'Press Start 2P', cursive;
-            padding: 15px;
-            font-size: 1rem;
-            border: 2px solid var(--neon-pink);
-            background: transparent;
-            color: var(--neon-pink);
-            text-shadow: 0 0 5px var(--neon-pink);
+            font-family: 'Press Start 2P', cursive; padding: 15px; font-size: 0.9rem;
+            border: 2px solid var(--neon-pink); background: transparent;
+            color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink);
             box-shadow: 0 0 10px var(--neon-pink) inset, 0 0 10px var(--neon-pink);
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.2s;
-            margin-top: 10px;
+            cursor: pointer; width: 100%; transition: all 0.2s; margin-top: 15px;
         }
+        .btn:hover, .btn:active { background: var(--neon-pink); color: #fff; box-shadow: 0 0 20px var(--neon-pink) inset, 0 0 30px var(--neon-pink); }
+        
+        .btn-alt { border-color: var(--neon-cyan); color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan); box-shadow: 0 0 10px var(--neon-cyan) inset, 0 0 10px var(--neon-cyan); }
+        .btn-alt:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 20px var(--neon-cyan) inset, 0 0 30px var(--neon-cyan); }
 
-        .btn:hover, .btn:active {
-            background: var(--neon-pink);
-            color: #fff;
-            box-shadow: 0 0 20px var(--neon-pink) inset, 0 0 30px var(--neon-pink);
-        }
+        .history { margin-top: 20px; font-size: 0.55rem; max-height: 100px; overflow-y: auto; text-align: left; border-top: 2px dashed #333; padding-top: 10px; line-height: 1.8; color: #ccc; }
 
-        .history {
-            margin-top: 25px;
-            font-size: 0.55rem;
-            max-height: 120px;
-            overflow-y: auto;
-            text-align: left;
-            border-top: 2px dashed #333;
-            padding-top: 10px;
-            line-height: 1.8;
-            color: #ccc;
+        /* Estilos del Leaderboard y Registro */
+        .highscore-input { display: none; margin: 15px 0; padding: 15px; background: rgba(0,0,0,0.5); border: 2px solid var(--neon-yellow); }
+        input[type="text"] {
+            background: transparent; border: none; border-bottom: 2px solid var(--neon-green);
+            color: var(--neon-green); font-family: 'Press Start 2P', cursive;
+            font-size: 1.2rem; width: 180px; text-align: center; text-transform: uppercase;
+            outline: none; margin-top: 10px; margin-bottom: 10px; text-shadow: 0 0 10px var(--neon-green);
         }
+        .leaderboard-table { width: 100%; font-size: 0.6rem; text-align: left; border-collapse: collapse; margin-bottom: 20px; }
+        .leaderboard-table th { color: var(--neon-pink); border-bottom: 1px dashed var(--neon-pink); padding-bottom: 10px; }
+        .leaderboard-table td { padding: 10px 0; color: #fff; border-bottom: 1px solid #222; }
+        .rank-1 td { color: var(--neon-yellow) !important; text-shadow: 0 0 5px var(--neon-yellow); }
+        .rank-2 td { color: #aaa !important; }
+        .rank-3 td { color: #cd7f32 !important; } /* Bronce */
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-cyan); }
 
         /* Animaciones */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes pulse-red { 0%, 100% { box-shadow: 0 0 10px var(--neon-red), inset 0 0 10px var(--neon-red); } 50% { box-shadow: 0 0 25px var(--neon-red), inset 0 0 25px var(--neon-red); } }
-        @keyframes shake {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            20% { transform: translate(-3px, 2px) rotate(-1deg); }
-            40% { transform: translate(3px, -2px) rotate(1deg); }
-            60% { transform: translate(-3px, -2px) rotate(-1deg); }
-            80% { transform: translate(3px, 2px) rotate(1deg); }
-        }
+        @keyframes pulse-red { 0%, 100% { box-shadow: 0 0 10px var(--neon-red), inset 0 0 10px var(--neon-red); } 50% { box-shadow: 0 0 20px var(--neon-red), inset 0 0 20px var(--neon-red); } }
+        @keyframes shake { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 20% { transform: translate(-3px, 2px) rotate(-1deg); } 40% { transform: translate(3px, -2px) rotate(1deg); } 60% { transform: translate(-3px, -2px) rotate(-1deg); } 80% { transform: translate(3px, 2px) rotate(1deg); } }
         .shake { animation: shake 0.3s; }
         .flash { animation: flashAnim 0.5s ease-out; }
-        @keyframes flashAnim {
-            0% { background-color: #fff; box-shadow: 0 0 50px #fff; }
-            100% { background-color: rgba(10, 10, 20, 0.95); }
-        }
+        @keyframes flashAnim { 0% { background-color: #fff; box-shadow: 0 0 50px #fff; } 100% { background-color: rgba(10, 10, 20, 0.95); } }
     </style>
 </head>
 <body>
@@ -194,17 +124,16 @@
     
     <div id="screen-start" class="screen active">
         <h1>CHRONO<br>SNIPER</h1>
-        <div class="crosshair">
-            <span>0.000</span>
-        </div>
-        <p style="font-size: 0.6rem; color: var(--neon-yellow); line-height: 1.5; margin-bottom: 30px;">
+        <div class="crosshair"><span>0.000</span></div>
+        <p style="font-size: 0.55rem; color: var(--neon-yellow); line-height: 1.5; margin-bottom: 20px;">
             Target: X.000<br><br>
             Perfect = 1000 pts<br>
             Great (X.00_) = 100 pts<br>
             Good (X.0__) = 10 pts<br>
-            Bad = 0 pts
+            Miss = 0 pts
         </p>
         <button class="btn" onclick="initGame()">INSERT COIN</button>
+        <button class="btn btn-alt" onclick="showLeaderboard()">HALL OF FAME</button>
     </div>
 
     <div id="screen-game" class="screen">
@@ -213,21 +142,15 @@
             <div>AMMO: <span id="laps-left">10</span></div>
             <div>SCORE: <span id="score">0</span></div>
         </div>
-        
         <div id="timer">0.000</div>
         <div id="message" style="color: var(--neon-yellow);">READY...</div>
-
         <button id="btn-main" class="btn" onclick="handleLap()">SHOOT!</button>
-
-        <div class="history" id="history">
-            <p style="text-align:center; opacity: 0.5;">--- COMBAT LOG ---</p>
-        </div>
+        <div class="history" id="history"><p style="text-align:center; opacity: 0.5;">--- COMBAT LOG ---</p></div>
     </div>
 
     <div id="screen-result" class="screen">
         <h1>MISSION<br>OVER</h1>
-        
-        <h2 style="color: var(--neon-cyan); font-size: 1.5rem;">SCORE: <span id="final-score">0</span></h2>
+        <h2 style="color: var(--neon-cyan); font-size: 1.3rem;">SCORE: <span id="final-score">0</span></h2>
         
         <div class="summary-stats">
             <div><span style="color: var(--neon-green);">PERFECTS:</span> <span id="sum-perfect">0</span></div>
@@ -236,6 +159,33 @@
             <div><span style="color: var(--neon-red);">MISSES:</span> <span id="sum-bad">0</span></div>
         </div>
 
+        <div id="new-highscore-area" class="highscore-input">
+            <h3 style="color: var(--neon-yellow); font-size: 0.8rem; margin-top:0;">NEW HIGH SCORE!</h3>
+            <p style="font-size: 0.55rem; margin: 10px 0;">ENTER NAME (MAX 8 CHARS):</p>
+            <input type="text" id="player-name" maxlength="8" autocomplete="off" placeholder="AAA">
+            <button class="btn btn-alt" onclick="saveHighScore()" style="font-size: 0.7rem; padding: 10px;">SAVE RECORD</button>
+        </div>
+
+        <div id="normal-end-buttons">
+            <button class="btn" onclick="showStartScreen()">MAIN MENU</button>
+            <button class="btn btn-alt" onclick="showLeaderboard()">LEADERBOARD</button>
+        </div>
+    </div>
+
+    <div id="screen-leaderboard" class="screen">
+        <h2>TOP 10 SNIPERS</h2>
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th style="width:15%">RNK</th>
+                    <th style="width:35%">NAME</th>
+                    <th style="width:25%">SCORE</th>
+                    <th style="width:25%">DATE</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+                </tbody>
+        </table>
         <button class="btn" onclick="showStartScreen()">MAIN MENU</button>
     </div>
 
@@ -259,53 +209,35 @@
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
         gain.gain.setValueAtTime(vol, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
     }
 
     function playSoundEffect(result) {
         switch(result) {
-            case 'perfect':
-                playTone(880, 'square', 0.1, 0.2); setTimeout(() => playTone(1108, 'square', 0.1, 0.2), 100); setTimeout(() => playTone(1318, 'square', 0.4, 0.2), 200); 
-                break;
-            case 'great':
-                playTone(523, 'square', 0.1, 0.1); setTimeout(() => playTone(659, 'square', 0.2, 0.1), 100); 
-                break;
-            case 'good':
-                playTone(440, 'triangle', 0.2, 0.1);
-                break;
-            case 'bad': // Sonido de fallo/error
-                playTone(150, 'sawtooth', 0.3, 0.3); setTimeout(() => playTone(100, 'sawtooth', 0.4, 0.3), 150);
-                break;
-            case 'start': // Pitido al arrancar el crono
-                playTone(1200, 'sine', 0.05, 0.1);
-                break;
-            case 'shoot': // Clic al disparar
-                playTone(200, 'square', 0.05, 0.2);
-                break;
-            case 'gameover':
-                playTone(400, 'sawtooth', 0.2, 0.2); setTimeout(() => playTone(300, 'sawtooth', 0.2, 0.2), 200); setTimeout(() => playTone(200, 'sawtooth', 0.6, 0.2), 400);
-                break;
+            case 'perfect': playTone(880, 'square', 0.1, 0.2); setTimeout(() => playTone(1108, 'square', 0.1, 0.2), 100); setTimeout(() => playTone(1318, 'square', 0.4, 0.2), 200); break;
+            case 'great': playTone(523, 'square', 0.1, 0.1); setTimeout(() => playTone(659, 'square', 0.2, 0.1), 100); break;
+            case 'good': playTone(440, 'triangle', 0.2, 0.1); break;
+            case 'bad': playTone(150, 'sawtooth', 0.3, 0.3); setTimeout(() => playTone(100, 'sawtooth', 0.4, 0.3), 150); break;
+            case 'start': playTone(1200, 'sine', 0.05, 0.1); break;
+            case 'shoot': playTone(200, 'square', 0.05, 0.2); break;
+            case 'gameover': playTone(400, 'sawtooth', 0.2, 0.2); setTimeout(() => playTone(300, 'sawtooth', 0.2, 0.2), 200); setTimeout(() => playTone(200, 'sawtooth', 0.6, 0.2), 400); break;
+            case 'highscore': playTone(523, 'square', 0.1, 0.2); setTimeout(() => playTone(659, 'square', 0.1, 0.2), 100); setTimeout(() => playTone(783, 'square', 0.1, 0.2), 200); setTimeout(() => playTone(1046, 'square', 0.4, 0.2), 300); break;
         }
     }
 
-    // --- VARIABLES DE JUEGO ---
-    let startTime;
-    let timerInterval;
-    let lapsRemaining = 10;
-    let totalScore = 0;
-    let isRunning = false;
-    
-    // Contadores para el resumen final
+    // --- VARIABLES Y REFERENCIAS ---
+    let startTime; let timerInterval; let lapsRemaining = 10; let totalScore = 0; let isRunning = false;
     let matchStats = { perfect: 0, great: 0, good: 0, bad: 0 };
+    
+    // Cargar puntuaciones de LocalStorage o crear array vacío
+    let highScores = JSON.parse(localStorage.getItem('chronoSniperScores')) || [];
 
-    // --- REFERENCIAS DOM ---
     const cabinet = document.getElementById('cabinet');
     const screenStart = document.getElementById('screen-start');
     const screenGame = document.getElementById('screen-game');
     const screenResult = document.getElementById('screen-result');
+    const screenLeaderboard = document.getElementById('screen-leaderboard');
     
     const timerDisplay = document.getElementById('timer');
     const messageDisplay = document.getElementById('message');
@@ -314,43 +246,81 @@
     const historyBox = document.getElementById('history');
     const btnMain = document.getElementById('btn-main');
 
-    // --- NAVEGACIÓN ENTRE PANTALLAS ---
+    // --- SISTEMA DE PANTALLAS ---
     function switchScreen(screenElement) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         screenElement.classList.add('active');
     }
 
-    function showStartScreen() {
-        switchScreen(screenStart);
+    function showStartScreen() { switchScreen(screenStart); }
+
+    // --- LEADERBOARD LOGIC ---
+    function checkIsHighScore(score) {
+        if (score === 0) return false; // 0 puntos no merecen el salón de la fama
+        if (highScores.length < 10) return true; // Si hay menos de 10, entra directo
+        return score > highScores[highScores.length - 1].score; // Si es mayor que el peor del Top 10
     }
 
-    function initGame() {
-        initAudio(); // Desbloquea el audio en el primer clic del usuario
-        playSoundEffect('start');
+    function saveHighScore() {
+        initAudio();
+        let name = document.getElementById('player-name').value.trim().toUpperCase();
+        if (name === "") name = "ANON";
         
-        // Reiniciar variables
-        lapsRemaining = 10;
-        totalScore = 0;
-        isRunning = false;
+        // Obtener fecha actual en formato corto (DD/MM/YYYY)
+        const today = new Date();
+        const dateStr = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth()+1).toString().padStart(2, '0')}/${today.getFullYear()}`;
+
+        const newRecord = { name: name, score: totalScore, date: dateStr };
+        
+        highScores.push(newRecord);
+        // Ordenar de mayor a menor
+        highScores.sort((a, b) => b.score - a.score);
+        // Quedarse solo con los 10 mejores
+        highScores = highScores.slice(0, 10);
+        
+        // Guardar en el navegador
+        localStorage.setItem('chronoSniperScores', JSON.stringify(highScores));
+        
+        playSoundEffect('start');
+        showLeaderboard();
+    }
+
+    function showLeaderboard() {
+        const tbody = document.getElementById('leaderboard-body');
+        tbody.innerHTML = '';
+
+        if (highScores.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding-top:20px; color:var(--neon-pink);">NO RECORDS YET</td></tr>';
+        } else {
+            highScores.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                row.className = `rank-${index + 1}`; // Para dar colores especiales al top 3 en CSS
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${entry.name}</td>
+                    <td>${entry.score}</td>
+                    <td>${entry.date}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        switchScreen(screenLeaderboard);
+    }
+
+    // --- LÓGICA DEL JUEGO ---
+    function initGame() {
+        initAudio(); playSoundEffect('start');
+        lapsRemaining = 10; totalScore = 0; isRunning = false;
         matchStats = { perfect: 0, great: 0, good: 0, bad: 0 };
         
-        // Reiniciar UI
-        scoreDisplay.textContent = "0";
-        lapsDisplay.textContent = "10";
-        timerDisplay.textContent = "0.000";
-        messageDisplay.textContent = "READY...";
-        messageDisplay.style.color = "var(--neon-yellow)";
+        scoreDisplay.textContent = "0"; lapsDisplay.textContent = "10"; timerDisplay.textContent = "0.000";
+        messageDisplay.textContent = "READY..."; messageDisplay.style.color = "var(--neon-yellow)";
         historyBox.innerHTML = '<p style="text-align:center; opacity: 0.5;">--- COMBAT LOG ---</p>';
-        
-        btnMain.textContent = "SHOOT!";
-        btnMain.disabled = false;
-        btnMain.style.borderColor = "var(--neon-pink)";
-        btnMain.style.color = "var(--neon-pink)";
+        btnMain.textContent = "SHOOT!"; btnMain.disabled = false; btnMain.style.borderColor = "var(--neon-pink)"; btnMain.style.color = "var(--neon-pink)";
 
         switchScreen(screenGame);
     }
 
-    // --- LÓGICA DEL CRONÓMETRO ---
     function startTimer() {
         startTime = Date.now();
         timerInterval = setInterval(() => {
@@ -361,89 +331,81 @@
 
     function handleLap() {
         if (!isRunning) {
-            playSoundEffect('start');
-            startTimer();
-            isRunning = true;
-            btnMain.textContent = "STOP!";
-            btnMain.style.borderColor = "var(--neon-cyan)";
-            btnMain.style.color = "var(--neon-cyan)";
-            messageDisplay.textContent = "TARGET LOCKED!";
-            messageDisplay.style.color = "#fff";
+            playSoundEffect('start'); startTimer(); isRunning = true;
+            btnMain.textContent = "STOP!"; btnMain.style.borderColor = "var(--neon-cyan)"; btnMain.style.color = "var(--neon-cyan)";
+            messageDisplay.textContent = "TARGET LOCKED!"; messageDisplay.style.color = "#fff";
             return;
         }
 
-        playSoundEffect('shoot'); // Sonido de disparo
-        clearInterval(timerInterval); // Parar el tiempo inmediatamente
+        playSoundEffect('shoot');
+        clearInterval(timerInterval);
 
         const timeString = timerDisplay.textContent;
-        const msString = timeString.split('.')[1]; // Extraemos los 3 números después de la coma
+        const msString = timeString.split('.')[1];
         
         let points = 0; let msg = ""; let color = ""; let soundType = "";
 
-        // Reiniciar animaciones
-        cabinet.classList.remove('shake', 'flash');
-        void cabinet.offsetWidth;
+        cabinet.classList.remove('shake', 'flash'); void cabinet.offsetWidth;
 
-        // Comprobación visual estricta
         if (msString === "000") {
-            points = 1000; msg = "PERFECT!!!"; color = "var(--neon-green)"; soundType = "perfect";
-            matchStats.perfect++;
+            points = 1000; msg = "PERFECT!!!"; color = "var(--neon-green)"; soundType = "perfect"; matchStats.perfect++;
             cabinet.classList.add('flash');
         } else if (msString.startsWith("00")) {
-            points = 100; msg = "GREAT!"; color = "var(--neon-cyan)"; soundType = "great";
-            matchStats.great++;
+            points = 100; msg = "GREAT!"; color = "var(--neon-cyan)"; soundType = "great"; matchStats.great++;
         } else if (msString.startsWith("0")) {
-            points = 10; msg = "GOOD"; color = "var(--neon-yellow)"; soundType = "good";
-            matchStats.good++;
+            points = 10; msg = "GOOD"; color = "var(--neon-yellow)"; soundType = "good"; matchStats.good++;
         } else {
-            points = 0; msg = "MISS..."; color = "var(--neon-red)"; soundType = "bad";
-            matchStats.bad++;
+            points = 0; msg = "MISS..."; color = "var(--neon-red)"; soundType = "bad"; matchStats.bad++;
             cabinet.classList.add('shake');
         }
 
-        setTimeout(() => playSoundEffect(soundType), 50); // Pequeño retraso para no pisar el sonido de disparo
+        setTimeout(() => playSoundEffect(soundType), 50);
 
-        totalScore += points;
-        lapsRemaining--;
-        
-        messageDisplay.textContent = msg;
-        messageDisplay.style.color = color;
-        messageDisplay.style.textShadow = `0 0 10px ${color}`;
-        scoreDisplay.textContent = totalScore;
-        lapsDisplay.textContent = lapsRemaining;
+        totalScore += points; lapsRemaining--;
+        messageDisplay.textContent = msg; messageDisplay.style.color = color; messageDisplay.style.textShadow = `0 0 10px ${color}`;
+        scoreDisplay.textContent = totalScore; lapsDisplay.textContent = lapsRemaining;
 
         const lapRecord = document.createElement('div');
         lapRecord.innerHTML = `[${10 - lapsRemaining}] <b>${timeString}</b> - <span style="color:${color}">${msg}</span> (+${points})`;
         historyBox.prepend(lapRecord);
         
         if (lapsRemaining > 0) {
-            btnMain.textContent = "RELOADING...";
-            btnMain.disabled = true;
+            btnMain.textContent = "RELOADING..."; btnMain.disabled = true;
             setTimeout(() => {
-                playSoundEffect('start');
-                startTimer();
-                btnMain.textContent = "STOP!";
-                btnMain.disabled = false;
-            }, 1000); // 1 segundo para ver el resultado y "recargar"
+                playSoundEffect('start'); startTimer();
+                btnMain.textContent = "STOP!"; btnMain.disabled = false;
+            }, 1000);
         } else {
-            setTimeout(endGame, 1000); // Esperar 1 segundo antes de ir a la pantalla de resumen
+            setTimeout(endGame, 1000);
         }
     }
 
     function endGame() {
-        playSoundEffect('gameover');
-        
-        // Llenar datos de la pantalla de resumen
         document.getElementById('final-score').textContent = totalScore;
         document.getElementById('sum-perfect').textContent = matchStats.perfect;
         document.getElementById('sum-great').textContent = matchStats.great;
         document.getElementById('sum-good').textContent = matchStats.good;
         document.getElementById('sum-bad').textContent = matchStats.bad;
 
+        const isNewRecord = checkIsHighScore(totalScore);
+
+        if (isNewRecord) {
+            playSoundEffect('highscore'); // Sonido especial de victoria
+            document.getElementById('new-highscore-area').style.display = 'block';
+            document.getElementById('normal-end-buttons').style.display = 'none';
+            document.getElementById('player-name').value = '';
+            
+            // Auto-enfocar el input para que pueda escribir directamente
+            setTimeout(() => document.getElementById('player-name').focus(), 600);
+        } else {
+            playSoundEffect('gameover');
+            document.getElementById('new-highscore-area').style.display = 'none';
+            document.getElementById('normal-end-buttons').style.display = 'block';
+        }
+
         switchScreen(screenResult);
     }
 </script>
 
 </body>
-</html>
 </html>
